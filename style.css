@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=VT323&display=swap');
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comfortaa', cursive;
+}
+
+p{
+    font-size: 20px;
+    justify-content: center;
+}
+    
+
+.board{
+    display: grid;
+    grid-template-columns: repeat(17,1fr);
+    grid-template-rows: repeat(17,1fr);
+    width: 425px;
+    height: 425px;
+}
+
+.board>div:nth-child(2n+1):not(.snake){
+    background-color: #34be8298
+}
+ 
+.board>div:nth-child(2n):not(.snake){
+    background-color: #2fdd9281
+}
+ 
+.tile{
+    border: none;
+}
+
+.food{
+    background-color: rgba(0, 128, 0, 0);
+    width: 25px;
+    height: 25px;
+}
+
+.food-content{
+    margin: 0px;
+    padding-left: 2px;
+    font-size: 20px;
+}
+
+.snake-head{
+    width: 25px;
+    height: 25px
+}
+
+.snake-head-content{
+    margin: 0px;
+    font-size: 20px;
+}
+
+.snake{
+    background-color: #116530;
+    border-radius: 10%;
+}
+
+.score{
+    font-size: 20px;
+}
+
+button{
+    display: flex;
+    margin: 10px;
+    width: 100px;
+    height: 50px;
+}
+
+.gameEndedPopUp{
+    position: relative;
+    display: inline-block;
+    width: 510px;
+    height: 510px;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.164);
+}
+
+.showGameEndedPopUp{
+    visibility: visible;
+}
