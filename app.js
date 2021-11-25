@@ -22,7 +22,9 @@ const gameState = {
   currentScore: 0,
   highestScore: 0,
   gameInterval: null,
+  currentSpeed: 150,
   food: [3, 12],
+  poision: [],
   snake: {
     body: [
       //[y,x]
@@ -104,7 +106,7 @@ function bootStrap() {
   speedDownButton.innerText = `🔻🐢\nSpeed Down`;
   titleParaElement.innerText = "snake";
   showScoreElement.innerText = `🍎 ${gameState.currentScore} 🏆 ${gameState.highestScore}`;
-  gameStartElement.innerText = `The Snake will start moving when you press Play\n Eat as many 🍎s you can to score\n Press 🔺🐇 Speed Up to go faster\n Press 🔻🐢 Speed Down to go slower`
+  gameStartElement.innerText = `The Snake will start moving when you press Play\n Eat as many 🍎s you can to score\n Press 🔺🐇 Speed Up to go faster\n Press 🔻🐢 Speed Down to go slower`;
 
   // functions
   buildInitialState();
@@ -148,8 +150,8 @@ function moveSnake() {
     console.log("game Ended!!!");
     playButtonElement.classList.add("show-play-button");
     playButtonElement.classList.remove("hide-play-button");
-   
-    gameEndParagraphMessage.innerText = `Game Over! \n🍎: ${gameState.currentScore} \n 🏆: ${gameState.highestScore}`;
+
+    gameEndParagraphMessage.innerText = `Game Over! \n\n🍎: ${gameState.currentScore} \n 🏆: ${gameState.highestScore}`;
     gameEndElement.classList.add("show-game-end-popup");
     return;
   }
@@ -218,45 +220,45 @@ function isGameEnded(snakeHead) {
 document.addEventListener("keydown", function (event) {
   event.preventDefault();
   //if the game hasn't started yet, start the interval
-  // if (gameState.gameInterval === null){
+  // if (gameState.gameInterval === null) {
   //   gameState.gameInterval = setInterval(tick, 150);
   // }
   const nextDirectionY = gameState.snake.nextDirection[0][0];
   const nextDirectionX = gameState.snake.nextDirection[0][1];
   // snake can't move towards the opposite directions //
-  if (!gameState.keyPressed){
-  switch (event.key) {
-    case "ArrowUp":
-      if (nextDirectionY === 1 && nextDirectionX === 0) {
-        console.log("wrong direction");
-        return;
-      }
-      gameState.snake.nextDirection = [[-1, 0]];
-      break;
-    case "ArrowDown":
-      if (nextDirectionY === -1 && nextDirectionX === 0) {
-        console.log("wrong direction");
-        return;
-      }
-      gameState.snake.nextDirection = [[1, 0]];
-      break;
-    case "ArrowLeft":
-      if (nextDirectionY === 0 && nextDirectionX === 1) {
-        console.log("wrong direction");
-        return;
-      }
-      gameState.snake.nextDirection = [[0, -1]];
-      break;
-    case "ArrowRight":
-      if (nextDirectionY === 0 && nextDirectionX === -1) {
-        console.log("wrong direction");
-        return;
-      }
-      gameState.snake.nextDirection = [[0, 1]];
-      break;
+  if (!gameState.keyPressed) {
+    switch (event.key) {
+      case "ArrowUp":
+        if (nextDirectionY === 1 && nextDirectionX === 0) {
+          console.log("wrong direction");
+          return;
+        }
+        gameState.snake.nextDirection = [[-1, 0]];
+        break;
+      case "ArrowDown":
+        if (nextDirectionY === -1 && nextDirectionX === 0) {
+          console.log("wrong direction");
+          return;
+        }
+        gameState.snake.nextDirection = [[1, 0]];
+        break;
+      case "ArrowLeft":
+        if (nextDirectionY === 0 && nextDirectionX === 1) {
+          console.log("wrong direction");
+          return;
+        }
+        gameState.snake.nextDirection = [[0, -1]];
+        break;
+      case "ArrowRight":
+        if (nextDirectionY === 0 && nextDirectionX === -1) {
+          console.log("wrong direction");
+          return;
+        }
+        gameState.snake.nextDirection = [[0, 1]];
+        break;
+    }
+    gameState.keyPressed = true;
   }
-  gameState.keyPressed = true;
-}
 });
 
 playButtonElement.addEventListener("click", function () {
@@ -264,7 +266,8 @@ playButtonElement.addEventListener("click", function () {
   playButtonElement.classList.add("hide-play-button");
   gameStartElement.classList.add("hide-game-start-popup");
   gameEndElement.classList.remove("show-game-end-popup");
-  gameState.gameInterval = setInterval(tick, 150);
+  gameState.currentSpeed = 150;
+  gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
   gameState.currentScore = 0;
   gameState.snake.body = [
     //[y,x]
@@ -276,6 +279,18 @@ playButtonElement.addEventListener("click", function () {
   gameState.food = [3, 12];
   gameState.snake.nextDirection = [[0, 1]];
 });
+
+speedUpButton.addEventListener("click", function (){
+  clearInterval(gameState.gameInterval);
+  gameState.currentSpeed -= 20;
+  gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
+})
+
+speedDownButton.addEventListener("click", function (){
+  clearInterval(gameState.gameInterval);
+  gameState.currentSpeed += 20;
+  gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
+})
 
 // add to above
 function tick() {
