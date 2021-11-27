@@ -5,14 +5,18 @@ const boardWrapperElement = document.createElement("div");
 const scoreParentElement = document.createElement("div");
 const showScoreElement = document.createElement("p");
 const titleDivElement = document.createElement("div");
-const titleParaElement = document.createElement("p");
+const speedParentElement = document.createElement("div");
+const showSpeedElement = document.createElement("p");
 const gameStartElement = document.createElement("div");
+const gameStartElementTitle = document.createElement("p");
 const gameStartElementMessage = document.createElement("p");
 const gameEndElement = document.createElement("div");
 const gameEndParagraphMessage = document.createElement("p");
 const playButtonElement = document.createElement("button");
 const speedUpButton = document.createElement("button");
 const speedDownButton = document.createElement("button");
+const arrowKeyElement = document.createElement("div");
+const arrowKeyParagraphMessage = document.createElement("p");
 
 // state / mode/
 // const PBR(object=reference) vs PBV
@@ -78,35 +82,42 @@ function bootStrap() {
   boardElement.classList.add("board");
   boardWrapperElement.classList.add("board-wrapper");
   scoreParentElement.classList.add("score");
+  speedParentElement.classList.add("speed");
   titleDivElement.classList.add("title");
   playButtonElement.classList.add("play-button");
   speedUpButton.classList.add("speed-up-button");
   speedDownButton.classList.add("speed-down-button");
   gameStartElement.classList.add("game-start-popup-modal");
+  gameStartElementTitle.classList.add("game-start-popup-title");
   gameStartElementMessage.classList.add("game-start-popup-message");
   gameEndElement.classList.add("game-end-popup-modal");
   gameEndParagraphMessage.classList.add("game-end-popup-message");
 
   appElement.appendChild(titleDivElement);
   appElement.appendChild(scoreParentElement);
-  appElement.appendChild(boardWrapperElement);
+  appElement.appendChild(speedParentElement);
+  appElement.appendChild(boardWrapperElement); 
   boardWrapperElement.appendChild(boardElement);
   scoreParentElement.appendChild(showScoreElement);
-  titleDivElement.appendChild(titleParaElement);
+  speedParentElement.appendChild(showSpeedElement);
   appElement.appendChild(playButtonElement);
   appElement.appendChild(speedUpButton);
   appElement.appendChild(speedDownButton);
   appElement.appendChild(gameStartElement);
   appElement.appendChild(gameEndElement);
+  gameStartElement.appendChild(gameStartElementTitle);
   gameStartElement.appendChild(gameStartElementMessage);
   gameEndElement.appendChild(gameEndParagraphMessage);
+  appElement.appendChild(arrowKeyElement);
+  appElement.appendChild(arrowKeyParagraphMessage);
 
   playButtonElement.innerText = "\nPlay";
   speedUpButton.innerText = `🔺🐇\nSpeed Up`;
   speedDownButton.innerText = `🔻🐢\nSpeed Down`;
-  titleParaElement.innerText = "snake";
   showScoreElement.innerText = `🍎 ${gameState.currentScore} 🏆 ${gameState.highestScore}`;
-  gameStartElement.innerText = `The Snake will start moving when you press Play\n Eat as many 🍎s you can to score\n Press 🔺🐇 Speed Up to go faster\n Press 🔻🐢 Speed Down to go slower`;
+  showSpeedElement.innerText = `🐇`;
+  gameStartElementTitle.innerText = `Let's play snake!`;
+  gameStartElementMessage.innerText = `Press Play button to start\n Eat as many 🍎s you can to score\n Press 🔺🐇 Speed Up to go faster\n Press 🔻🐢 Speed Down to go slower`;
 
   // functions
   buildInitialState();
@@ -219,10 +230,13 @@ function isGameEnded(snakeHead) {
 // listeners
 document.addEventListener("keydown", function (event) {
   event.preventDefault();
+  arrowKeyElement.classList.remove("arrow-key");
+  arrowKeyParagraphMessage.classList.remove("arrow-key-message");
+  arrowKeyParagraphMessage.innerText = "";
   //if the game hasn't started yet, start the interval
-  // if (gameState.gameInterval === null) {
-  //   gameState.gameInterval = setInterval(tick, 150);
-  // }
+  if (gameState.gameInterval === null) {
+    gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
+  }
   const nextDirectionY = gameState.snake.nextDirection[0][0];
   const nextDirectionX = gameState.snake.nextDirection[0][1];
   // snake can't move towards the opposite directions //
@@ -262,12 +276,13 @@ document.addEventListener("keydown", function (event) {
 });
 
 playButtonElement.addEventListener("click", function () {
+  arrowKeyElement.classList.add("arrow-key");
+  arrowKeyParagraphMessage.classList.add("arrow-key-message");
+  arrowKeyParagraphMessage.innerText = "Use your arrow keys to start moving";
   playButtonElement.classList.remove("show-play-button");
   playButtonElement.classList.add("hide-play-button");
   gameStartElement.classList.add("hide-game-start-popup");
   gameEndElement.classList.remove("show-game-end-popup");
-  gameState.currentSpeed = 150;
-  gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
   gameState.currentScore = 0;
   gameState.snake.body = [
     //[y,x]
@@ -277,20 +292,60 @@ playButtonElement.addEventListener("click", function () {
     [10, 5],
   ];
   gameState.food = [3, 12];
+  buildInitialState();
+  renderBoard();
+  // setTimeout(function(){
+  // gameState.currentSpeed = 150;
+  // gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
   gameState.snake.nextDirection = [[0, 1]];
+  // },3000)
+  gameState.gameInterval = null;
+  console.log("currentSpeed:" + gameState.currentSpeed);
 });
 
-speedUpButton.addEventListener("click", function (){
-  clearInterval(gameState.gameInterval);
-  gameState.currentSpeed -= 20;
-  gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
-})
+speedUpButton.addEventListener("click", function () {
+  // max speed at 90, min speed at 240
+  if (gameState.currentSpeed > 90 && gameState.currentSpeed <= 240) {
+    gameState.currentSpeed -= 30;
+  }
+  if (gameState.currentSpeed === 240) {
+    showSpeedElement.innerText = `🐢🐢🐢`;
+  } else if (gameState.currentSpeed === 210) {
+    showSpeedElement.innerText = `🐢🐢`;
+  } else if (gameState.currentSpeed === 180) {
+    showSpeedElement.innerText = `🐢`;
+  } else if (gameState.currentSpeed === 150) {
+    showSpeedElement.innerText = `🐇`;
+  } else if (gameState.currentSpeed === 120) {
+    showSpeedElement.innerText = `🐇🐇`;
+  } else if (gameState.currentSpeed === 90) {
+    showSpeedElement.innerText = `🐇🐇🐇`;
+  }
+  console.log("currentSpeedUpButton:" + gameState.currentSpeed);
+  // gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
+});
 
-speedDownButton.addEventListener("click", function (){
-  clearInterval(gameState.gameInterval);
-  gameState.currentSpeed += 20;
-  gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
-})
+speedDownButton.addEventListener("click", function () {
+  // max speed at 90, min speed at 240
+  if (gameState.currentSpeed >= 90 && gameState.currentSpeed < 240) {
+    gameState.currentSpeed += 30;
+  }
+  if (gameState.currentSpeed === 240) {
+    showSpeedElement.innerText = `🐢🐢🐢`;
+  } else if (gameState.currentSpeed === 210) {
+    showSpeedElement.innerText = `🐢🐢`;
+  } else if (gameState.currentSpeed === 180) {
+    showSpeedElement.innerText = `🐢`;
+  } else if (gameState.currentSpeed === 150) {
+    showSpeedElement.innerText = `🐇`;
+  } else if (gameState.currentSpeed === 120) {
+    showSpeedElement.innerText = `🐇🐇`;
+  } else if (gameState.currentSpeed === 90) {
+    showSpeedElement.innerText = `🐇🐇🐇`;
+  }
+  console.log("currentSpeedDownButton:" + gameState.currentSpeed);
+  // gameState.gameInterval = setInterval(tick, gameState.currentSpeed);
+});
 
 // add to above
 function tick() {

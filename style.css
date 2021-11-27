@@ -12,13 +12,20 @@ body {
 
 .title {
   display: flex;
+  background-image: url(../snake-background.png);
+  background-size: cover;
+  width: 256px;
+  height: 144px;
   justify-content: center;
-  font-size: 25px;
 }
 
 /* board design */
 .board {
   display: grid;
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-51%, -50%);
   grid-template-columns: repeat(17, 1fr);
   grid-template-rows: repeat(17, 1fr);
   width: 425px;
@@ -66,8 +73,18 @@ body {
   border-radius: 10%;
 }
 
-.score {
+.score, .speed {
   font-size: 20px;
+  position: absolute;
+  top: 30%;
+}
+
+.score{
+  left: 38%;
+}
+
+.speed{
+  left: 58%
 }
 
 /* button design */
@@ -123,8 +140,8 @@ button:hover {
   position: absolute;
   left: 50%;
   top: 60%;
-  width: 425px;
-  height: 425px;
+  width: 500px;
+  height: 500px;
   visibility: visible;
   background-color: #a8ece7de;
   transform: translate(-51%, -50%);
@@ -133,9 +150,39 @@ button:hover {
   margin: 10px;
   justify-content: center;
 }
+
 .game-start-popup-modal {
   visibility: visible;
+  align-items: center;
+}
+
+.game-start-popup-title{
+  font-size: 35px;
+  position: absolute;
+  left: 25%;
+  top: 10%;
+}
+
+.game-start-popup-message{
   font-size: 17px;
+}
+
+.arrow-key{
+  background-image: url(../arrow-key.png);
+  background-size: cover;
+  z-index: 2;
+  position: absolute;
+  left: 40%;
+  top: 40%;
+  width: 166px;
+  height: 113.5px;
+}
+
+.arrow-key-message{
+  position: absolute;
+  left: 40%;
+  top: 52%;
+  color: white;
 }
 
 .game-end-popup-modal {
