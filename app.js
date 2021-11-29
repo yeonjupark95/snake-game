@@ -27,7 +27,6 @@ const gameState = {
   gameInterval: null,
   currentSpeed: 150,
   food: [3, 12],
-  superFood: [],
   snake: {
     body: [
       //[y,x]
@@ -161,6 +160,7 @@ function moveSnake() {
     gameState.snake.body[0][0] + gameState.snake.nextDirection[0][0],
     gameState.snake.body[0][1] + gameState.snake.nextDirection[0][1],
   ];
+
   if (isGameEnded(snakeHead)) {
     // HTML Elements / showing the play button for an option to replay
     playButtonElement.classList.add("show-play-button");
@@ -170,11 +170,12 @@ function moveSnake() {
     gameEndElement.classList.add("show-game-end-popup");
     return;
   }
+
   gameState.snake.body.unshift(snakeHead);
   gameState.snake.body.pop();
-  // Adding the food to move while snake is moving
-  const foodPosition = gameState.food;
-  if (snakeHead[0] === foodPosition[0] && snakeHead[1] === foodPosition[1]) {
+  gameState.keyPressed = false;
+
+  if (snakeHead[0] === gameState.food[0] && snakeHead[1] === gameState.food[1]) {
     moveFood();
     gameState.currentScore += 1;
     if (gameState.highestScore < gameState.currentScore) {
@@ -184,9 +185,6 @@ function moveSnake() {
     const snakeTail = gameState.snake.body[snakeBodyLength - 1];
     gameState.snake.body.push(snakeTail);
   }
-  if (gameState.currentScore>3){
-  }
-  gameState.keyPressed = false;
 }
 
 function showScore() {
@@ -228,6 +226,14 @@ function isGameEnded(snakeHead) {
       return true;
     }
   }
+}
+
+// Incremental change that happens to the state every time
+function tick() {
+  moveSnake();
+  buildInitialState();
+  renderBoard();
+  showScore();
 }
 
 // Listeners / keydown
@@ -298,19 +304,12 @@ playButtonElement.addEventListener("click", function () {
     [10, 5],
   ];
   gameState.food = [3, 12];
-  buildInitialState();
-  renderBoard();
   gameState.snake.nextDirection = [[0, 1]];
   gameState.gameInterval = null;
-});
 
-// Incremental change that happens to the state every time
-function tick() {
-  moveSnake();
   buildInitialState();
   renderBoard();
-  showScore();
-}
+});
 
 // Listener / speed up button
 speedUpButton.addEventListener("click", function () {
