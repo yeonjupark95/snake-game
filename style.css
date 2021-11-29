@@ -15,7 +15,8 @@ body {
   background-image: url(../snake-background.png);
   background-size: cover;
   width: 256px;
-  height: 144px;
+  height: 114px;
+  border: none;
   justify-content: center;
 }
 
@@ -23,6 +24,7 @@ body {
 .board {
   display: grid;
   position: absolute;
+  margin: 6.5rem 0rem;
   left: 50%;
   top: 60%;
   transform: translate(-51%, -50%);
@@ -30,6 +32,8 @@ body {
   grid-template-rows: repeat(17, 1fr);
   width: 425px;
   height: 425px;
+  z-index: -1;
+  padding: 3rem;
 }
 
 .board > div:nth-child(2n + 1):not(.snake) {
@@ -40,10 +44,6 @@ body {
   background-color: #2fdd92;
 }
 
-.tile {
-  border: none;
-}
-
 /* food design */
 .food {
   background-color: rgba(0, 128, 0, 0);
@@ -51,7 +51,7 @@ body {
   height: 25px;
 }
 
-.food-emoji {
+.poison-emoji,.food-emoji {
   margin: 0px;
   padding-left: 2px;
   font-size: 20px;
@@ -73,18 +73,20 @@ body {
   border-radius: 10%;
 }
 
+/* score board design */
 .score, .speed {
-  font-size: 20px;
   position: absolute;
   top: 30%;
 }
 
 .score{
-  left: 38%;
+  left: 35%;
+  font-size: 20px;
 }
 
 .speed{
-  left: 58%
+  left: 58%;
+  font-size: 25px;
 }
 
 /* button design */
@@ -107,11 +109,11 @@ button:hover {
 }
 
 .speed-up-button {
-  top: 50%;
+  top: 65%;
 }
 
 .speed-down-button {
-  top: 60%;
+  top: 80%;
 }
 
 .speed-up-button,
@@ -128,7 +130,7 @@ button:hover {
   padding: 0px;
   position: absolute;
   left: 50%;
-  top: 80%;
+  top: 100%;
   visibility: visible;
   transform: translate(-50%, -50%);
 }
@@ -139,15 +141,14 @@ button:hover {
   display: flex;
   position: absolute;
   left: 50%;
-  top: 60%;
-  width: 500px;
-  height: 500px;
+  top: 80%;
+  width: 100%;
+  height: 100%;
   visibility: visible;
   background-color: #a8ece7de;
   transform: translate(-51%, -50%);
-  padding: 45px;
+  padding: 40px;
   z-index: 1;
-  margin: 10px;
   justify-content: center;
 }
 
@@ -159,7 +160,7 @@ button:hover {
 .game-start-popup-title{
   font-size: 35px;
   position: absolute;
-  left: 25%;
+  left: 40%;
   top: 10%;
 }
 
@@ -170,18 +171,19 @@ button:hover {
 .arrow-key{
   background-image: url(../arrow-key.png);
   background-size: cover;
-  z-index: 2;
+  z-index: 1;
   position: absolute;
   left: 40%;
-  top: 40%;
+  top: 50%;
   width: 166px;
   height: 113.5px;
 }
 
 .arrow-key-message{
   position: absolute;
-  left: 40%;
-  top: 52%;
+  left: 38%;
+  top: 70%;
+  width: 100%;
   color: white;
 }
 
@@ -190,11 +192,12 @@ button:hover {
   font-size: 35px;
 }
 
-.hide-game-start-popup {
-  visibility: hidden;
+.game-end-popup-message{
+  position: absolute;
+  top: 20%;
 }
 
-.hide-play-button {
+.hide-game-start-popup, .hide-play-button {
   visibility: hidden;
 }
 
