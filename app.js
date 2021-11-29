@@ -147,7 +147,7 @@ function renderBoard() {
         snakeHeadEmoji.classList.add("snake-head-emoji");
         snakeHeadEmoji.innerText = "👀";
         tile.appendChild(snakeHeadEmoji);
-      } 
+      }
       tile.classList.add("tile");
       boardElement.appendChild(tile);
     }
@@ -175,7 +175,10 @@ function moveSnake() {
   gameState.snake.body.pop();
   gameState.keyPressed = false;
 
-  if (snakeHead[0] === gameState.food[0] && snakeHead[1] === gameState.food[1]) {
+  if (
+    snakeHead[0] === gameState.food[0] &&
+    snakeHead[1] === gameState.food[1]
+  ) {
     moveFood();
     gameState.currentScore += 1;
     if (gameState.highestScore < gameState.currentScore) {
